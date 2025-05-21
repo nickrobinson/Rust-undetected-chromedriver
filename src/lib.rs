@@ -2,7 +2,7 @@ use rand::Rng;
 #[cfg(any(target_os = "linux", target_os = "macos"))]
 use std::os::unix::fs::PermissionsExt;
 use std::process::Command;
-use thirtyfour::{DesiredCapabilities, WebDriver};
+use thirtyfour::{BrowserCapabilitiesHelper, ChromiumLikeCapabilities, DesiredCapabilities, WebDriver};
 use std::error::Error;
 use std::time::Duration;
 use thirtyfour::{prelude::ElementWaitable, By};
@@ -107,12 +107,12 @@ pub async fn chrome() -> Result<WebDriver, Box<dyn std::error::Error>> {
     let mut caps = DesiredCapabilities::chrome();
     caps.set_no_sandbox().unwrap();
     caps.set_disable_dev_shm_usage().unwrap();
-    caps.add_chrome_arg("--disable-blink-features=AutomationControlled")
+    caps.add_arg("--disable-blink-features=AutomationControlled")
         .unwrap();
-    caps.add_chrome_arg("window-size=1920,1080").unwrap();
-    caps.add_chrome_arg("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36").unwrap();
-    caps.add_chrome_arg("disable-infobars").unwrap();
-    caps.add_chrome_option("excludeSwitches", ["enable-automation"])
+    caps.add_arg("window-size=1920,1080").unwrap();
+    caps.add_arg("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36").unwrap();
+    caps.add_arg("disable-infobars").unwrap();
+    caps.insert_browser_option("excludeSwitches", ["enable-automation"])
         .unwrap();
     let mut driver = None;
     let mut attempt = 0;
